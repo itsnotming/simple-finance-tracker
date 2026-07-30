@@ -4,7 +4,7 @@ A simple personal finance tracker built with Flask and SQLite.
 
 ## Screenshot
 
-![Homepage](github_screenshot/homepage.png)
+![Homepage](screenshots/github_screenshot.png)
 
 ## Features
 
