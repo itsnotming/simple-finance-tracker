@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Finance Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+
+    <h1>Finance Tracker</h1>
+
+    <p>Welcome to your personal finance tracker!</p>
+
+    <h2>Summary</h2>
+    <p>Balance: ${{ "%.2f"|format(balance) }}</p>
+    <p>Total Income: ${{ "%.2f"|format(total_income) }}</p>
+    <p>Total Expense: ${{ "%.2f"|format(total_expense) }}</p>
+
+    <a href="{{ url_for('main.add_transaction') }}">Add Transaction</a>
+
+    <hr>
+
+    {% if transactions %}
+        <table border="1">
+            <tr>
+                <th>Description</th>
+                <th>Amount</th>
+                <th>Type</th>
+                <th>Category</th>
+                <th>Action</th>
+            </tr>
+
+            {% for transaction in transactions %}
+            <tr>
+                <td>{{ transaction.description }}</td>
+                <td>${{ "%.2f"|format(transaction.amount) }}</td>
+                <td>{{ transaction.transaction_type }}</td>
+                <td>{{ transaction.category }}</td>
+                <td>
+                    <form
+                        action="{{ url_for('main.edit_transaction', transaction_id=transaction.id)}}"
+                        method="GET"
+                        style="display: inline;"
+                    >
+                        <button type="submit">Edit</button>
+                    </form>
+                    <form
+                        action="{{ url_for('main.delete_transaction', transaction_id=transaction.id) }}"
+                        method="POST"
+                        style="display: inline;"
+                    >
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No transactions yet.</p>
+    {% endif %}
+
+</body>
+
+</html>

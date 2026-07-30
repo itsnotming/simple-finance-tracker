@@ -1,0 +1,6 @@
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+norecursedirs = ["venv", "instance"]
+
+[tool.ruff]
+line-length = 88
