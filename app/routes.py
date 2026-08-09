@@ -8,15 +8,24 @@ main = Blueprint("main", __name__)
 
 @main.route("/")
 def home():
-    transactions = Transaction.query.all()
+    all_transactions = Transaction.query.all()
+    selected_category = request.args.get("category", "")
+    categories = sorted(
+        {transaction.category for transaction in all_transactions}
+    )
+    transactions = [
+        transaction
+        for transaction in all_transactions
+        if not selected_category or transaction.category == selected_category
+    ]
     total_income = sum(
         transaction.amount
-        for transaction in transactions
+        for transaction in all_transactions
         if transaction.transaction_type == "income"
     )
     total_expense = sum(
         transaction.amount
-        for transaction in transactions
+        for transaction in all_transactions
         if transaction.transaction_type == "expense"
     )
     balance = total_income - total_expense
@@ -27,6 +36,8 @@ def home():
         balance=balance,
         total_income=total_income,
         total_expense=total_expense,
+        categories=categories,
+        selected_category=selected_category,
     )
 
 
