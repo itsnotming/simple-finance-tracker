@@ -20,19 +20,45 @@
     <a href="{{ url_for('main.add_transaction') }}">Add Transaction</a>
 
     <form class="filter-form" method="GET" action="{{ url_for('main.home') }}">
-        <label for="category">Filter by Category:</label>
-        <select id="category" name="category">
-            <option value="">All Transactions</option>
-            {% for category in categories %}
-                <option
-                    value="{{ category }}"
-                    {% if category == selected_category %}selected{% endif %}
-                >
-                    {{ category }}
+        <div>
+            <label for="category">Filter by Category:</label>
+            <select id="category" name="category">
+                <option value="">All Transactions</option>
+                {% for category in categories %}
+                    <option
+                        value="{{ category }}"
+                        {% if category == selected_category %}selected{% endif %}
+                    >
+                        {{ category }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div>
+            <label for="search">Search Description:</label>
+            <input
+                type="text"
+                id="search"
+                name="search"
+                value="{{ search_text }}"
+            >
+        </div>
+
+        <div>
+            <label for="sort">Sort by Amount:</label>
+            <select id="sort" name="sort">
+                <option value="">Default</option>
+                <option value="amount_asc" {% if sort_order == "amount_asc" %}selected{% endif %}>
+                    Amount: Low to High
                 </option>
-            {% endfor %}
-        </select>
-        <button type="submit">Apply Filter</button>
+                <option value="amount_desc" {% if sort_order == "amount_desc" %}selected{% endif %}>
+                    Amount: High to Low
+                </option>
+            </select>
+        </div>
+
+        <button type="submit">Apply</button>
     </form>
 
     <hr>

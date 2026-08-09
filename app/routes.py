@@ -10,6 +10,8 @@ main = Blueprint("main", __name__)
 def home():
     all_transactions = Transaction.query.all()
     selected_category = request.args.get("category", "")
+    search_text = request.args.get("search", "")
+    sort_order = request.args.get("sort", "")
     categories = sorted(
         {transaction.category for transaction in all_transactions}
     )
@@ -18,6 +20,24 @@ def home():
         for transaction in all_transactions
         if not selected_category or transaction.category == selected_category
     ]
+
+    if search_text:
+        search_text_lower = search_text.lower()
+        transactions = [
+            transaction
+            for transaction in transactions
+            if search_text_lower in transaction.description.lower()
+        ]
+
+    if sort_order == "amount_asc":
+        transactions = sorted(transactions, key=lambda transaction: transaction.amount)
+    elif sort_order == "amount_desc":
+        transactions = sorted(
+            transactions,
+            key=lambda transaction: transaction.amount,
+            reverse=True,
+        )
+
     total_income = sum(
         transaction.amount
         for transaction in all_transactions
@@ -38,6 +58,8 @@ def home():
         total_expense=total_expense,
         categories=categories,
         selected_category=selected_category,
+        search_text=search_text,
+        sort_order=sort_order,
     )
 
 
